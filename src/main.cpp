@@ -35,8 +35,8 @@ int main() {
 		return -1;
 	}
 
-	// pause variables
 	bool paused = false;
+	bool playing = true;
 
 	// pause text
 	Text pause_text(sans, "Paused", 60);
@@ -66,9 +66,19 @@ int main() {
 			if (const auto* key = event->getIf<Event::KeyPressed>()) {
 				if (key->scancode == Keyboard::Scan::Escape) {
 					paused = !paused;
+					switch (paused) {
+					case true:
+						rain.pause();
+						break;
+					case false:
+						rain.play();
+						break;
+					default:
+						break;
+					}
 				}
 			}
-			if (event->is<Event::FocusLost>()) { paused = true; }
+			if (event->is<Event::FocusLost>()) { paused = true; rain.pause(); }
 		}
 
 		auto now = chrono::high_resolution_clock::now();
@@ -98,6 +108,7 @@ int main() {
 					e->exit();
 					if (auto player = dynamic_cast<Player*>(e.get())) {
 						rain.setVolume(50);
+						playing = false;
 					}
 				}
 			}

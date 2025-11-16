@@ -55,7 +55,7 @@ Player::Player(float size, Vector2f pos)
 	}
 	pains.setBuffer(painbuff);
 
-	auto r = make_unique<RectangleShape>(Vector2f{ size, size });
+	auto r = make_unique<CircleShape>(size / 2);
 	r->setFillColor(Color(128, 128, 255));
 	drawable = move(r);
 }
