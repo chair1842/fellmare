@@ -1,5 +1,5 @@
 #pragma once
-#include "entity.hpp"
+#include "../base/entity.hpp"
 // a entity class for collision detection
 
 class CollisionEntity : public Entity {

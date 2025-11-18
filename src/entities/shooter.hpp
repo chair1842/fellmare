@@ -1,5 +1,5 @@
 #pragma once
-#include "entity.hpp"
+#include "../base/entity.hpp"
 #include "bullet.hpp"
 #include "player.hpp"
 #include <SFML/Audio.hpp>
