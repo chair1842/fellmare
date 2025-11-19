@@ -15,8 +15,11 @@ public:
 
     bool spawn(string name, unique_ptr<Entity> entity);
     template <typename T, typename... Args>
-    bool spawn(string name, Args&&... args) {
-        return spawn(name, make_unique<T>(forward<Args>(args)...));
+    bool spawn(const std::string& name, Args&&... args) {
+        static_assert(std::is_base_of<Entity, T>::value, "T must derive from Entity");
+        if (exists(name) || in_spawn_buff(name)) return false;
+        spawn_buffer[name] = std::make_unique<T>(std::forward<Args>(args)...);
+        return true;
     }
     bool destroy(string name);
 
