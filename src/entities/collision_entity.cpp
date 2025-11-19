@@ -8,5 +8,5 @@ bool CollisionEntity::checkCollision(const CollisionEntity& other) const{
 }
 
 CollisionEntity::CollisionEntity(Vector2f position, Vector2f rect_size)
-	: Entity(position, rect_size) {
+	: Entity2D(position, rect_size) {
 }

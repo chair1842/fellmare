@@ -7,5 +7,5 @@ public:
 	const int speed = 750;
 	Bullet(float angle, Vector2f pos);
 	
-	void update(float dt, vector<unique_ptr<Entity>>& entity_list, vector<unique_ptr<Entity>>& to_spawn) override;
+	void update(float dt, EntityList& entity_list) override;
 };

@@ -4,6 +4,7 @@
 #include <print>
 #include "entities/player.hpp"
 #include "entities/shooter.hpp"
+#include "base/entity_list.hpp"
 using namespace sf;
 using namespace std;
 
@@ -14,16 +15,12 @@ int main() {
 	auto window = RenderWindow(VideoMode({480u, 480u}), "Ambiguity");
 	window.setFramerateLimit(60);
 
-	vector<unique_ptr<Entity>> entity_list;
-	entity_list.push_back(make_unique<Player>(32, Vector2f{ 224, 224 }));
-	entity_list.push_back(make_unique<Shooter>(Vector2f{ 32, 32 }));
-	entity_list.push_back(make_unique<Shooter>(Vector2f{ 448, 32 }, 49));
-	entity_list.push_back(make_unique<Shooter>(Vector2f{ 448, 448 }, 75));
-	entity_list.push_back(make_unique<Shooter>(Vector2f{ 32, 448 }, 60));
-
-	for (auto& e : entity_list) {
-		e->enter();
-	}
+	EntityList entity_list;
+	entity_list.spawn("player", make_unique<Player>(32, Vector2f{224, 224}));
+	entity_list.spawn("sh1", make_unique<Shooter>(Vector2f{32, 32}));
+	entity_list.spawn("sh2", make_unique<Shooter>(Vector2f{448, 32}, 49));
+	entity_list.spawn("sh3", make_unique<Shooter>(Vector2f{448, 448}, 75));
+	entity_list.spawn("sh4",make_unique<Shooter>(Vector2f{32, 448}, 60));
 
 	auto last_time = chrono::high_resolution_clock::now();
 
@@ -73,9 +70,6 @@ int main() {
 					case false:
 						rain.play();
 						break;
-					default:
-						break;
-					}
 				}
 			}
 			if (event->is<Event::FocusLost>()) { paused = true; rain.pause(); }
@@ -85,46 +79,23 @@ int main() {
 		float dt = duration_cast<chrono::duration<float>>(now - last_time).count();
 		last_time = now;
 
-		vector<unique_ptr<Entity>> to_spawn;
-
 		// vuvu :3
 		// pause functionality ^v^
 		if (!paused) {
 			// update loop for all entities
-			for (auto& e : entity_list) {
-				e->update(dt, entity_list, to_spawn);
-			}
+			entity_list.update(dt);
 
-			// spawn buffer
-			for (auto& e : to_spawn) {
-				entity_list.push_back(std::move(e));
-				// i will have to call enter() on these
-			}
-			to_spawn.clear(); // clear the spawn buffer
-
-			// to delete section
-			for (auto& e : entity_list) { // i have so many entity_list loops
-				if (e->to_delete) {
-					e->exit();
-					if (auto player = dynamic_cast<Player*>(e.get())) {
-						rain.setVolume(50);
-						playing = false;
-					}
-				}
-			}
-			entity_list.erase(
-				// remove if from all of the entities, if to_delete is true
-				remove_if(entity_list.begin(), entity_list.end(),
-					[](const unique_ptr<Entity>& e) { return e->to_delete; }),
-				entity_list.end()
-			);
+			
+			entity_list.flush();
 		}
 
 		// Clear and display
 		window.clear();
-		for (auto& e : entity_list) {
-			e->draw(window); // wow, very nice
-		}
+		entity_list.for_each([&window](Entity& e) {
+			if (auto e2d = dynamic_cast<Entity2D*>(&e)) {
+				e2d->draw(window);
+			}
+			});
 		if (paused) {
 			window.draw(pause_text);
 		}

@@ -1,6 +1,6 @@
 #include "player.hpp"
 
-void Player::update(float dt, vector<unique_ptr<Entity>>& entity_list, vector<unique_ptr<Entity>>& to_spawn) {
+void Player::update(float dt, EntityList& entity_list) {
 	if (is_hit && lives == 1) {
 		pains.play();
 	}
@@ -12,7 +12,7 @@ void Player::update(float dt, vector<unique_ptr<Entity>>& entity_list, vector<un
 	else if (lives <= 0) {
 		hits.stop();
 		pains.stop();
-		to_delete = true;
+		entity_list.destroy(name);
 		return;
 	}
 

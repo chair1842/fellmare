@@ -1,9 +1,10 @@
-#include "entity.hpp"
+#include "entity2d.hpp"
 
-Entity::Entity(Vector2f position, Vector2f rect_size)
-	: position(position), rect_size(rect_size) { }
+Entity2D::Entity2D(Vector2f position, Vector2f rect_size)
+	: position(position), rect_size(rect_size) {
+}
 
-void Entity::draw(RenderTarget& target) {
+void Entity2D::draw(RenderTarget& target) {
 	if (!drawable) return;
 
 	if (auto t = dynamic_cast<Transformable*>(drawable.get())) {

@@ -1,34 +1,26 @@
 #include "bullet.hpp"
 
-void Bullet::update(float dt, vector<unique_ptr<Entity>>& entity_list, vector<unique_ptr<Entity>>& to_spawn) {
+void Bullet::update(float dt, EntityList& entity_list) {
 	// move the bullet according to rotation and speed
 	// then delete it if it goes out of bounds
 	const float rad = rotation * (3.14159265f / 180.0f);
 	Vector2f direction = Vector2f(cosf(rad), sinf(rad));
 	position += direction * static_cast<float>(speed) * dt;
 
-	// check for player, if hit, quit the game
-	for (const auto& e : entity_list) {
-		if (auto player = dynamic_cast<Player*>(e.get())) {
-			if (checkCollision(*player)) {
-				player->is_hit = true;
-				to_delete = true;
-			}
+	Player* player = entity_list.get_as<Player>("player");
+
+	// check for player, if hit, enable is_hit
+	if (entity_list.exists("player")) {
+		if (checkCollision(*player)) { 
+			player->is_hit = true; 
 		}
+	} 
+	else {
+		entity_list.destroy(name);
 	}
 
-	Entity* player = nullptr;
-	for (const auto& e : entity_list) {
-		if (dynamic_cast<Player*>(e.get())) {
-			player = e.get();
-			break;
-		}
-	}
-	if (!player) { to_delete = true; return; } // no player found
-
-	// will throw an exeption. idk why
 	if (position.x < -rect_size.x || position.x > 480 || position.y < -rect_size.y || position.y > 480) {
-		to_delete = true;
+		entity_list.destroy(name);
 	}
 }
 
