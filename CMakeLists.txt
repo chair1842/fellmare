@@ -12,6 +12,6 @@ FetchContent_Declare(SFML
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(fellmare)
+add_executable(fellmare "src/main.cpp"  "src/base/entity_list.cpp"  "src/entities/player.cpp" "src/base/entity2d.cpp")
 target_compile_features(fellmare PRIVATE cxx_std_23)
-target_link_libraries(fellmare PRIVATE SFML::Graphics SFML::Audio)
+target_link_libraries(fellmare PRIVATE SFML::Graphics SFML::Audio SFML::Main)
