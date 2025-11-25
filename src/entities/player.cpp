@@ -1,6 +1,6 @@
 #include "player.hpp"
 
-void Player::update(float dt, EntityList& entl) {
+void Player::update(float dt) {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up)) {
 		velocity.y -= 1;
 	}

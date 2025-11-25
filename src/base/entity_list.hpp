@@ -17,16 +17,4 @@ public:
 	void spawn(std::unique_ptr<Entity> entity);
 	void spawn(std::string name, std::unique_ptr<Entity> entity);
 	void destroy(int id);
-
-	Entity* get(int id);
-	Entity* get(const std::string& name);
-	int name_to_id(const std::string& name);
-	std::string id_to_name(int id);
-
-	bool exists(int id);
-	bool exists(const std::string& name);
-	bool in_spawn_buffer(int id);
-	bool in_spawn_buffer(const std::string& name);
-	bool in_destroy_buffer(int id);
-	bool in_destroy_buffer(const std::string& name);
 };
