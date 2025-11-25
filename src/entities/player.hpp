@@ -7,7 +7,7 @@ public:
 	sf::Vector2f velocity{ 0.f, 0.f };
 	const float speed = 3;
 
-	void update(float dt) override;
+	void update(float dt, EntityList& entl) override;
 	Player() : Entity2D("Player", 1) {
 		// set drawable to a square
 		bounding_box = { 32.f, 32.f };
